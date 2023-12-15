@@ -16,4 +16,4 @@ class PDF_Details(models.Model):
     pdf_file = models.FileField(upload_to='pdf_files/')
 
     def __str__(self):
-        return self.pdfname
+        return self.pdf_name

@@ -33,8 +33,10 @@ ALLOWED_HOSTS = []
 INSTALLED_APPS = [
 
     #MAUALLY ADDED PLUGINS
-    'jazzmin',
-    'fontawesomefree',
+    # 'jazzmin',
+    'channels',
+    "daphne",
+    'fontawesomefree',    
 
     'django.contrib.admin',
     'django.contrib.auth',
@@ -47,6 +49,8 @@ INSTALLED_APPS = [
     'Profiles.apps.ProfilesConfig',
     'ChatBot.apps.ChatbotConfig',
 ]
+
+ASGI_APPLICATION = 'MAIN_IMPLEMENTATION.asgi.application'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

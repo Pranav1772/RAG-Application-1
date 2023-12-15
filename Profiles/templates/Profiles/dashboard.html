@@ -1,8 +1,10 @@
-{% extends "MAIN_IMPLEMENTATION/base.html" %} {% load static %} {% block body %}
+{% extends "MAIN_IMPLEMENTATION/base.html" %} 
+{% load static %} 
+{% block body %}
 <header id="header" class="header fixed-top d-flex align-items-center">
   <div class="d-flex align-items-center justify-content-between">
     <a href="index.html" class="logo d-flex align-items-center">
-      <img src="{% static " MAIN_PROJECT/img/logo.png" %}" alt="">
+      <img src="{% static " MAIN_IMPLEMENTATION/img/logo.png" %}" alt="">
       <span class="d-none d-lg-block">ChatBot</span>
     </a>
     <i class="fa-solid fa-bars"></i>
@@ -20,7 +22,7 @@
   <ul class="sidebar-nav" id="sidebar-nav">
 
     <li class="nav-item">
-      <a class="nav-link" href="{% url 'dashboard' %}">
+      <a class="nav-link " href="{% url 'dashboard' %}">
         <i class="bi bi-grid"></i>
         <span>Dashboard</span>
       </a>
@@ -53,14 +55,15 @@
   <section class="section">
 
     <div class="row">
-      
+      {% block content %}
       <div class="col-lg-4">
         <div class="card">
           <div class="card-body">
-            <div class="card-title text-center">Number of users Admin</div>
+            <div class="card-title text-center">Number of users: <br>{{ username_count }}</div>
           </div>
         </div>
       </div>
+      {% endblock %}
 
       <div class="col-lg-4">
         <div class="card">
