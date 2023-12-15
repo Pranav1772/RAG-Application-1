@@ -17,6 +17,19 @@ body {
   font-family: "Open Sans", sans-serif;
   background: #f6f9ff;
   color: #444444;
+  /* overflow: hidden; */
+}
+
+.k-card-height{
+  height: calc(100vh - 100px) !important  ; 
+}
+
+.k-message-height{
+  height: 100%;
+}
+
+.pdf-link:hover{
+  background: #f6f9ff;
 }
 
 a {
@@ -737,12 +750,12 @@ h6 {
   font-weight: 600;
   color: #012970;
   transition: 0.3;
-  padding: 10px 0 10px 40px;
+  padding: 10px 0 10px 11px;
   transition: 0.3s;
 }
 
 .sidebar-nav .nav-content a i {
-  font-size: 6px;
+  font-size: 15px;
   margin-right: 8px;
   line-height: 0;
   border-radius: 50%;

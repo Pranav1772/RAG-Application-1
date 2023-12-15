@@ -63,20 +63,30 @@
   <ul class="sidebar-nav" id="sidebar-nav">
     <!-- Add more PDF links with corresponding data-pdf-id -->
 
-    <li class="nav-item">
-      <a class="nav-link collapsed" data-bs-target="#components-nav" data-bs-toggle="collapse" href="#">
-        <i class="bi bi-menu-button-wide"></i><span>PDF List</span><i class="bi bi-chevron-down ms-auto"></i>
-      </a>
-      <ul id="components-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
-        {% for pdf in pdf_data %}
-        <li>
-          <a href="{% url 'view_pdf' pdf_id=pdf.pdf_id %}" class="pdf-link" data-pdf-id="{{ pdf.pdf_id }}">
-            <i class="bi bi-circle"></i><span>{{ pdf.pdf_name }}</span>
-          </a>
-        </li>
-        {% endfor %}
-      </ul>
-    </li>
+    {% comment %}
+    <a
+      class="nav-link collapsed"
+      data-bs-target="#components-nav"
+      data-bs-toggle="collapse"
+      href="#"
+    >
+      <i class="bi bi-menu-button-wide"></i><span>PDF List</span
+      ><i class="bi bi-chevron-down ms-auto"></i>
+    </a>
+    {% endcomment %}
+    <ul id="components-nav" class="nav-content">
+      {% for pdf in pdf_data %}
+      <li class="nav-item">
+        <a
+          href="{% url 'view_pdf' pdf_id=pdf.pdf_id %}"
+          class="pdf-link"
+          data-pdf-id="{{ pdf.pdf_id }}"
+        >
+          <i class="bi bi-file-earmark"></i><span>{{ pdf.pdf_name }}</span>
+        </a>
+      </li>
+      {% endfor %}
+    </ul>
   </ul>
   <!-- <button type="button" id="send-pdf-id-btn" class="btn btn-info col-sm-4"></button> -->
 </aside>
@@ -88,24 +98,34 @@
     <div class="row">
       <div class="col-lg-6">
         <div class="card">
-          <div class="card-body">
+          <div class="card-body k-card-height">
             <h5 class="card-title">PDF View</h5>
-            <div id="pdf-container" style="height: 550px;">
-            </div>
+            <div id="pdf-container" style="height: 550px"></div>
           </div>
         </div>
       </div>
       <div class="col-lg-6">
         <div class="card">
-          <div class="card-body sample">
+          <div class="card-body sample k-card-height">
             <h5 class="card-title">Chat Window</h5>
-            <div class="chat-messages me-3" id="chatMessages">
-            </div>
+            <div
+              class="chat-messages me-3 k-message-height"
+              id="chatMessages"
+            ></div>
             <form id="messageForm">
-              <div class="row mb-3" style="bottom: 0;">
-                <div class="col-sm-12 d-flex align-items-end justify-content-between">
-                  <input type="text" id="userMessage" class="form-control me-2" placeholder="Enter Message here">
-                  <button type="submit" class="btn btn-info send_btn">Send</button>
+              <div class="row mb-3 mt-2" style="bottom: 0">
+                <div
+                  class="col-sm-12 d-flex align-items-end justify-content-between"
+                >
+                  <input
+                    type="text"
+                    id="userMessage"
+                    class="form-control me-2"
+                    placeholder="Enter Message here"
+                  />
+                  <button type="submit" class="btn btn-info send_btn">
+                    Send
+                  </button>
                 </div>
               </div>
             </form>
@@ -171,15 +191,20 @@
     form.reset();
   });
 
-  document.addEventListener("adobe_dc_view_sdk.ready", function()
-    {
-        var adobeDCView = new AdobeDC.View({clientId: "7e571d346d3b409ea0777c42454c9e07", divId: "pdf-container"});
-        adobeDCView.previewFile(
-       {
-          content:   {location: {url: "https://acrobatservices.adobe.com/view-sdk-demo/PDFs/Bodea Brochure.pdf"}},
-          metaData: {fileName: "Bodea Brochure.pdf"}
-       });
+  document.addEventListener("adobe_dc_view_sdk.ready", function () {
+    var adobeDCView = new AdobeDC.View({
+      clientId: "7e571d346d3b409ea0777c42454c9e07",
+      divId: "pdf-container",
     });
+    adobeDCView.previewFile({
+      content: {
+        location: {
+          url: "https://acrobatservices.adobe.com/view-sdk-demo/PDFs/Bodea Brochure.pdf",
+        },
+      },
+      metaData: { fileName: "Bodea Brochure.pdf" },
+    });
+  });
 </script>
 <script src="https://acrobatservices.adobe.com/view-sdk/viewer.js"></script>
 {% endblock body %}
