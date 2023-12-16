@@ -10,27 +10,21 @@ from langchain.memory import ConversationBufferMemory
 from django.contrib.messages import get_messages
 
 class ChatConsumer(WebsocketConsumer):
-    def connect(self):      
-        self.accept()             
+    def connect(self,message):      
+        self.accept()               
+        self.pdf_id = message.get('pdf_id')  
+        print(self.pdf_id)
 
-    def my_consumer_type(self, event):
-        # Handle the received data
-        data = json.loads(event['text'])
-        message = data['message']
-
-        # Do something with the received data
-        # ...
-
-        # Send a response back to the client
-        self.send(text_data=json.dumps({
-            'message': 'Data processed successfully'
-        }))  
-
-    def receive(self, text_data,**kwargs):                 
+    def receive(self, text_data):      
+        group = Group.objects.get(name='india')
+        chat = Chat(
+            content = text_data['pdf_id'],
+            group = 
+        )           
         #  message_type = data.get('type')
-        data = json.loads(text_data)
-        if message_type == 'send_data':
-            self.send(text_data=json.dumps({'message': 'Data received successfully'}))
+        # data = json.loads(text_data)
+        # if message_type == 'send_data':
+        #     self.send(text_data=json.dumps({'message': 'Data received successfully'}))
             
             
         # Check if conversation chain exists

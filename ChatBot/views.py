@@ -18,10 +18,13 @@ def chat(request):
 
 def view_pdf(request,pdf_id):       
     channel_layer = get_channel_layer()
-    async_to_sync(channel_layer.send)(
-        'websocket.send_data',  # Consumer channel name
-        {'type': 'send_data', 'data': 'Your data here'}
-    )
+    async_to_sync(channel_layer.group_send(
+        'india',
+        {
+            'type':'chat.message',
+            'message':pdf_id
+        }
+    ))
     return HttpResponseRedirect(reverse('chatbot'))
 
     # if os.path.exists(pdf_path):
