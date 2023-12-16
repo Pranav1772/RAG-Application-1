@@ -3,11 +3,7 @@ from Profiles.models import PDF_Details
 from django.http import HttpResponse, HttpResponseRedirect
 import os, json
 from django.urls import reverse
-from django.contrib import messages
-from channels.layers import get_channel_layer
-from asgiref.sync import async_to_sync
-
-
+from django.core.cache import cache
 
 # Create your views here.
 def chat(request):
@@ -16,22 +12,6 @@ def chat(request):
     context = {'pdf_data': pdf_data}
     return render(request,'ChatBot/chat.html',context)
 
-def view_pdf(request,pdf_id):       
-    channel_layer = get_channel_layer()
-    async_to_sync(channel_layer.group_send(
-        group_name,
-        {
-            'type':'chat.message',
-            'message':pdf_id
-        }
-    ))
-    return HttpResponseRedirect(reverse('chatbot'))
-
-    # if os.path.exists(pdf_path):
-    #     with open(pdf_path, 'rb') as pdf_file:
-    #         response = HttpResponse(pdf_file.read(), content_type='application/pdf')
-    #         print(response)
-    #         response['Content-Disposition'] = f'inline; filename="{pdf_details.pdf_name}"'
-    #         return response
-    # else:
-    #     return HttpResponse('PDF not found', status=404)
+def view_pdf(request,pdf_id):
+    cache.set('my_pdf_data', pdf_id, timeout=300) 
+    return HttpResponseRedirect(reverse('chatbot'))    

@@ -8,30 +8,28 @@ from langchain.chat_models import ChatOpenAI
 from langchain.chains import ConversationalRetrievalChain
 from langchain.memory import ConversationBufferMemory
 from django.contrib.messages import get_messages
+from asgiref.sync import async_to_sync
+from channels.layers import get_channel_layer
+from django.core.cache import cache
 
 class ChatConsumer(WebsocketConsumer):
     def connect(self):      
-        self.accept()               
-        
+        self.accept()           
 
     def receive(self, text_data):      
-        self.pdf_id = text_data.get('pdf_id')
-        
-        print(self.pdf_id)
-        #  message_type = data.get('type')
-        # data = json.loads(text_data)
-        # if message_type == 'send_data':
-        #     self.send(text_data=json.dumps({'message': 'Data received successfully'}))
-            
-            
+        text_data_json = json.loads(text_data)
+        message = text_data_json['message']
+        pdf_id = cache.get('my_pdf_data')
+        print(pdf_id)
+
         # Check if conversation chain exists
-        if not hasattr(self, 'qa'):            
+        if not hasattr(self, 'qa'):           
             # Initialize conversation chain on first message
-            pdf_details = get_object_or_404(PDF_Details, pdf_id=self.pdf_id)
+            pdf_details = get_object_or_404(PDF_Details, pdf_id=pdf_id)
             vectordb_path = pdf_details.pdf_vectordb_path
-            embedding = OpenAIEmbeddings(openai_api_key='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')
+            embedding = OpenAIEmbeddings(openai_api_key='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')
             vectordb = Chroma(persist_directory=vectordb_path, embedding_function=embedding)
-            llm = ChatOpenAI(model_name="gpt-3.5-turbo",temperature=0.6,openai_api_key='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')
+            llm = ChatOpenAI(model_name="gpt-3.5-turbo",temperature=0.6,openai_api_key='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')
             memory = ConversationBufferMemory(memory_key="chat_history",return_messages = True)
             retriever = vectordb.as_retriever()
             self.qa = ConversationalRetrievalChain.from_llm(llm,retriever = retriever,memory = memory)
@@ -44,7 +42,7 @@ class ChatConsumer(WebsocketConsumer):
         self.send(text_data=json.dumps({
             'type':'chat',
             'question':message,
-            'message':result["answer"]
+            'message':result["answer"],
         }))
 
         def createPersona(self, ch):

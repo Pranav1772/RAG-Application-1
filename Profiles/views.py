@@ -51,6 +51,6 @@ def upload_pdf(request):
         pages = loader.load()
         text_splitter = TokenTextSplitter(chunk_size=1000, chunk_overlap=150, length_function=len)
         docs = text_splitter.split_documents(pages)
-        embedding = OpenAIEmbeddings(openai_api_key='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')
+        embedding = OpenAIEmbeddings(openai_api_key='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')
         vectordb = Chroma.from_documents(documents=docs, embedding=embedding, persist_directory=vectordb_path)        
         return HttpResponseRedirect(reverse('manage_docs'))
