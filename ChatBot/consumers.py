@@ -7,25 +7,36 @@ from langchain.embeddings.openai import OpenAIEmbeddings
 from langchain.chat_models import ChatOpenAI
 from langchain.chains import ConversationalRetrievalChain
 from langchain.memory import ConversationBufferMemory
+from django.contrib.messages import get_messages
 
 class ChatConsumer(WebsocketConsumer):
-    def connect(self):
-        self.accept()
+    def connect(self):      
+        self.accept()             
 
+    def my_consumer_type(self, event):
+        # Handle the received data
+        data = json.loads(event['text'])
+        message = data['message']
+
+        # Do something with the received data
+        # ...
+
+        # Send a response back to the client
         self.send(text_data=json.dumps({
-            'type':'connection_established',
-            'message':'You are now connected!'
-        }))
+            'message': 'Data processed successfully'
+        }))  
 
-    def receive(self, text_data):
-        text_data_json = json.loads(text_data)
-        message = text_data_json['message']
-        print('message:',message)
-
+    def receive(self, text_data,**kwargs):                 
+        #  message_type = data.get('type')
+        data = json.loads(text_data)
+        if message_type == 'send_data':
+            self.send(text_data=json.dumps({'message': 'Data received successfully'}))
+            
+            
         # Check if conversation chain exists
-        if not hasattr(self, 'qa'):
+        if not hasattr(self, 'qa'):            
             # Initialize conversation chain on first message
-            pdf_details = get_object_or_404(PDF_Details, pdf_id=6)
+            pdf_details = get_object_or_404(PDF_Details, pdf_id=self.pdf_id)
             vectordb_path = pdf_details.pdf_vectordb_path
             embedding = OpenAIEmbeddings(openai_api_key='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')
             vectordb = Chroma(persist_directory=vectordb_path, embedding_function=embedding)

@@ -1,14 +1,13 @@
 from django.shortcuts import render, get_object_or_404
 from Profiles.models import PDF_Details
 from django.http import HttpResponse, HttpResponseRedirect
-import os
+import os, json
 from django.urls import reverse
+from django.contrib import messages
+from channels.layers import get_channel_layer
+from asgiref.sync import async_to_sync
 
-# from langchain.vectorstores import Chroma
-# from langchain.embeddings.openai import OpenAIEmbeddings
-# from langchain.chat_models import ChatOpenAI
-# from langchain.chains import ConversationalRetrievalChain
-# from langchain.memory import ConversationBufferMemory
+
 
 # Create your views here.
 def chat(request):
@@ -18,7 +17,11 @@ def chat(request):
     return render(request,'ChatBot/chat.html',context)
 
 def view_pdf(request,pdf_id):       
-    context = {'pdf_id': pdf_id}
+    channel_layer = get_channel_layer()
+    async_to_sync(channel_layer.send)(
+        'websocket.send_data',  # Consumer channel name
+        {'type': 'send_data', 'data': 'Your data here'}
+    )
     return HttpResponseRedirect(reverse('chatbot'))
 
     # if os.path.exists(pdf_path):
