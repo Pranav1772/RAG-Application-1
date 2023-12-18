@@ -1,18 +1,75 @@
-{% extends "MAIN_IMPLEMENTATION/base.html" %} 
-{% load static %} 
+{% extends "MAIN_IMPLEMENTATION/base.html" %}
+{% load static %}
 {% block body %}
 <header id="header" class="header fixed-top d-flex align-items-center">
   <div class="d-flex align-items-center justify-content-between">
-    <a href="index.html" class="logo d-flex align-items-center">
-      <img src="{% static " MAIN_IMPLEMENTATION/img/logo.png" %}" alt="">
-      <span class="d-none d-lg-block">ChatBot</span>
-    </a>
-    <i class="fa-solid fa-bars"></i>
     <i class="bi bi-list toggle-sidebar-btn"></i>
+    <a href="index.html" class="logo d-flex align-items-center">
+      <span class="d-none d-lg-block ms-4 mt-2">ChatBot 🤖</span>
+         </a>
+      
   </div>
   <!-- End Logo -->
 
+  <style>
+    .card {
+      height: 200px;
+      margin: 15px;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      background-image: linear-gradient(to bottom, #eee, #ddd);
+      transition: background-color 0.2s ease-in-out;
+    }
 
+    .card:hover {
+      background-color: #f5f5f5;
+    }
+
+    .card-title {
+      font-size: 1.4rem;
+      font-weight: bold;
+      align-items: center;
+      justify-content: center;
+      margin-top: 20px;
+      padding-bottom: 10px;
+
+    }
+
+    .card-title:first-child {
+      font-family: "Montserrat", sans-serif;
+      color: #d8bfd8;
+      background-position: center bottom;
+      background-repeat: no-repeat;
+    }
+
+    .card-title:nth-child(2) {
+      font-family: "Roboto", sans-serif;
+      color: #f05c37;
+
+      /* replace with relevant icon */
+      background-position: center bottom;
+      background-repeat: no-repeat;
+    }
+
+    .card-title:last-child {
+      font-family: "Open Sans", sans-serif;
+      color: #17a2b8;
+      background-position: center bottom;
+      background-repeat: no-repeat;
+    }
+
+    @media (max-width: 768px) {
+      .row {
+        display: flex;
+        flex-direction: column;
+      }
+
+      .card {
+        margin-bottom: 10px;
+      }
+    }
+  </style>
   <!-- End Search Bar -->
 
 
@@ -29,18 +86,23 @@
     </li>
     <li class="nav-item">
       <a class="nav-link collapsed" href="{% url 'manage_docs' %}">
-        <i class="bi bi-grid"></i>
+        <i class="bi bi-files"></i>
         <span>Manage Docs</span>
       </a>
     </li>
     <!-- End Dashboard Nav -->
     <li class="nav-item">
       <a class="nav-link collapsed" href="{% url 'manage_users' %}">
-        <i class="bi bi-grid"></i>
+        <i class="bx bxs-user-detail"></i>
         <span>Manage Users</span>
       </a>
     </li>
-    
+    <li class="nav-item">
+      <a class="nav-link collapsed" href="{% url 'chatbot' %}">
+        <i class="ri-chat-3-line"></i>
+        <span>ChatBot</span>
+      </a>
+    </li>
     <!-- temp start -->
     {% comment %} <li class="nav-item">
       <a class="nav-link collapsed" href="{% url 'sign_in' %}">
@@ -56,29 +118,29 @@
 
     <div class="row">
       {% block content %}
-      <div class="col-lg-4">
+      <div class="col-lg-6">
         <div class="card">
           <div class="card-body">
-            <div class="card-title text-center">Number of users: <br>{{ username_count }}</div>
+            <div class="card-title text-center">Number of users : <br>{{ username_count }}</div>
           </div>
         </div>
       </div>
       {% endblock %}
 
-      <div class="col-lg-4">
+      <div class="col-lg-6">
         <div class="card">
           <div class="card-body">
-            <div class="card-title text-center">Number of Documents</div>
+            <div class="card-title text-center">Number of Documents :<br>{{pdf_count}} </div>
           </div>
         </div>
       </div>
-      <div class="col-lg-4">
+      {% comment %} <div class="col-lg-4">
         <div class="card">
           <div class="card-body">
-            <div class="card-title text-center">Api key in use</div>
+            <div class="card-title text-center">Api key in use :<br>0</div>
           </div>
         </div>
-      </div>
+      </div> {% endcomment %}
     </div>
 
     </div>

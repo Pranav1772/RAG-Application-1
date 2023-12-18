@@ -1,14 +1,50 @@
 {% extends "MAIN_IMPLEMENTATION/base.html" %} {% load static %} {% block body %}
 <header id="header" class="header fixed-top d-flex align-items-center">
   <div class="d-flex align-items-center justify-content-between">
-    <a href="index.html" class="logo d-flex align-items-center">
-      <img src="{% static " MAIN_PROJECT/img/logo.png" %}" alt="">
-      <span class="d-none d-lg-block">ChatBot</span>
-    </a>
     <i class="bi bi-list toggle-sidebar-btn"></i>
+    <a href="index.html" class="logo d-flex align-items-center">
+      <span class="d-none d-lg-block ms-4 mt-2">ChatBot 🤖</span>
+         </a>
+      
   </div>
   <!-- End Logo -->
+<style>
 
+
+.card {
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.card-title {
+  font-weight: bold;
+ 
+  margin-bottom: 10px;
+}
+
+.card-body p {
+  line-height: 1.5;
+}
+
+
+
+.table th,
+    .table td {
+      border: 1px solid #ddd;
+      text-align: center;
+    }
+
+.table th {
+  background-color: #f2f2f2; 
+  font-weight: bold;
+  
+}
+
+/* Rest of your styles */
+
+
+</style>
 
   <!-- End Search Bar -->
 
@@ -25,18 +61,23 @@
     </li>
     <li class="nav-item">
       <a class="nav-link" href="{% url 'manage_docs' %}">
-        <i class="bi bi-grid"></i>
+        <i class="bi bi-files"></i>
         <span>Manage Docs</span>
       </a>
     </li>
     <!-- End Dashboard Nav -->
     <li class="nav-item">
       <a class="nav-link collapsed" href="{% url 'manage_users' %}">
-        <i class="bi bi-grid"></i>
+        <i class="bx bxs-user-detail"></i>
         <span>Manage Users</span>
       </a>
     </li>
-    
+    <li class="nav-item">
+      <a class="nav-link collapsed" href="{% url 'chatbot' %}">
+        <i class="ri-chat-3-line"></i>
+        <span>ChatBot</span>
+      </a>
+    </li>
     <!-- temp start -->
     {% comment %} <li class="nav-item">
       <a class="nav-link collapsed" href="{% url 'sign_in' %}">
@@ -56,56 +97,53 @@
             <h5 class="card-title">Manage Documents</h5>
             <div class="row mb-3">
               <form method="post" enctype="multipart/form-data" action="{% url 'upload_pdf' %}">
-              {% csrf_token %}
-              <label for="inputNumber" class="col-sm-2 col-form-label">File Upload</label>
-              <div class="col-sm-4">
-                <input class="form-control" type="file" id="formFile" name="pdf_file">
-              </div>
-              <div class="col-sm-8"></div>
+                {% csrf_token %}
+                <label for="inputNumber" class="col-sm-2 col-form-label mb-2">File Upload</label>
+                <div class="row">
+
+
+                  <div class="col-sm-4 mb-2">
+                    <input class="form-control" type="file" id="formFile" name="pdf_file">
+                  </div>
+                  <div class="col-sm-8">  <button type="submit" class="btn btn-outline-info"><i class="bi bi-upload"></i></button></div>
+                </div>
             </div>
-            <button type="submit" class="btn btn-outline-danger">Upload</button>
-          </form>
+          
+            </form>
           </div>
         </div>
         <div class="card">
           <div class="card-body">
             <h5 class="card-title">List of Uploaded Documents</h5>
-
+            <div class="table-responsive">
             <table class="table table-bordered">
               <thead>
-                <tr>
+                <tr >
                   <th scope="col">Sr. No.</th>
                   <th scope="col">Name</th>
                   <th scope="col">Size</th>
                   <th scope="col">Ready</th>
-      
+                  <th scope="col">Actions</th>
+
                 </tr>
               </thead>
               <tbody>
+                {% for pdf in pdf_details %}
                 <tr>
-                  <th scope="row">1</th>
-                  <td>Brandon Jacob</td>
-                  <td>Designer</td>
-                  <td>28</td>
-                  
+                  <td>{{pdf.pdf_id}}</td>
+                  <td>{{pdf.pdf_name}}</td>
+                  <td></td>
+                  <td></td>
+                  <td><button type="button" class="btn btn-outline-danger"><i class="ri-delete-bin-fill"></i></button>
+                    <button type="button" class="btn btn-outline-success ms-2"><i class="bx bx-refresh"></i></button></td>
+
                 </tr>
-                <tr>
-                  <th scope="row">2</th>
-                  <td>Bridie Kessler</td>
-                  <td>Developer</td>
-                  <td>35</td>
-                
-                </tr>
-             
+                {% endfor %}
+
               </tbody>
             </table>
-            <div class="row">
-              <div class="col-sm-6">
-                <button type="button" class="btn btn-outline-danger">Delete</button>
-                <button type="button" class="btn btn-outline-success ms-2">Re-Process</button>
-              </div>
-            </div>
-            
+         </div>
+
 
           </div>
         </div>

@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from .models import UserDetail, PDF_Details
 from django.http import HttpResponse
 from django.http import HttpResponseRedirect
@@ -16,14 +16,21 @@ from langchain.text_splitter import TokenTextSplitter
 # Create your views here.
 def dashboard(request):
     username_count = UserDetail.objects.all().count()
-    context = {'username_count': username_count,}
+    pdf_count = PDF_Details.objects.all().count()
+    context = {'username_count': username_count,'pdf_count':pdf_count}
     return render(request,'Profiles/dashboard.html',context)
 
 def manage_users(request):
-    return render(request,'Profiles/manage_users.html')
+    user_details_list = UserDetail.objects.all()
+    user_details = [{'user_id': user.user_id, 'user_name': user.user_name,'user_email':user.user_email} for user in user_details_list]
+    context = {'user_details': user_details}
+    return render(request,'Profiles/manage_users.html',context)
 
 def manage_docs(request):
-    return render(request,'Profiles/manage_docs.html')
+    pdf_details_list = PDF_Details.objects.all()
+    pdf_details = [{'pdf_id': pdf.pdf_id, 'pdf_name': pdf.pdf_name} for pdf in pdf_details_list]
+    context = {'pdf_details': pdf_details}
+    return render(request,'Profiles/manage_docs.html',context)
 
 from django.shortcuts import render, redirect
 
@@ -38,7 +45,16 @@ def add_user(request):
             user_password=user_password,
         )
         new_user.save()
-        return HttpResponseRedirect(reverse('manage_users'))        
+        return HttpResponseRedirect(reverse('manage_users'))  
+     
+def update_user(request,user_id):
+    user = get_object_or_404(UserDetail, user_id=user_id)
+
+    return HttpResponseRedirect(reverse('manage_docs'))
+
+def delete_user(request,user_id):
+    print(user_id)
+    return HttpResponseRedirect(reverse('manage_docs'))
 
 def upload_pdf(request):
     if request.method == 'POST':
@@ -54,3 +70,11 @@ def upload_pdf(request):
         embedding = OpenAIEmbeddings(openai_api_key='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')
         vectordb = Chroma.from_documents(documents=docs, embedding=embedding, persist_directory=vectordb_path)        
         return HttpResponseRedirect(reverse('manage_docs'))
+
+def delete_pdf(request,pdf_id):
+    print(pdf_id)
+    return HttpResponseRedirect(reverse('manage_user'))
+
+def reprocess_pdf(request,pdf_id):
+    print(pdf_id)
+    return HttpResponseRedirect(reverse('manage_user'))
