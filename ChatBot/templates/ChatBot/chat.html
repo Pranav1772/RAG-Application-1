@@ -3,12 +3,11 @@
 <header id="header" class="header fixed-top d-flex align-items-center">
   <div class="d-flex align-items-center justify-content-between">
     <i class="bi bi-list toggle-sidebar-btn"></i>
-    <a href="profiles/admin-dashboard" class="logo d-flex align-items-center">
+    <a href="{% url "chatbot" %}" class="logo d-flex align-items-center">
       <span class="d-none d-lg-block ms-4">ChatBot</span>
     </a>
   </div>
   <!-- End Logo -->
-
   <style>
     .sample {
       height: 796px;
@@ -112,6 +111,21 @@
               class="chat-messages me-3 k-message-height"
               id="chatMessages"
             ></div>
+              <form method="post" enctype="multipart/form-data" action="{% url 'upload_img' %}">
+                {% comment %} {% url 'upload_img' %} {% endcomment %}
+                {% csrf_token %}
+                <input
+                    type="file"
+                    name="imgFile"
+                    id="imgUpload"
+                    class="form-control me-2"
+                    placeholder="Enter Message here"
+                  />    
+                  <button type="submit" class="btn btn-info send_btn">
+                    Send
+                  </button>
+              </form>
+              
             <form id="messageForm">
               <div class="row mb-3 mt-2" style="bottom: 0">
                 <div

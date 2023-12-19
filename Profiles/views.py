@@ -49,22 +49,35 @@ def add_user(request):
      
 def update_user(request,user_id):
     user = get_object_or_404(UserDetail, user_id=user_id)
-    return render(request,'Profiles/update_user_page',user)
+    return render(request,'Profiles/update_users_page.html',{'user': user})
 
-def update_users_page(request):
+# def update_users_page(request):  
+#     if request.method == 'POST':        
+#         user_id = request.POST.get('user_id')
+#         print(request.POST.get('user_id'))
+#         user = get_object_or_404(UserDetail, user_id=user_id)
+#         user.user_name = request.POST.get('user_name')
+#         user.user_email = request.POST.get('user_email')
+#         user.user_password = request.POST.get('user_password')    
+#         user.save()
+
+def update_activity(request):
     if request.method == 'POST':
-            username = request.POST.get('username')
-            user_email = request.POST.get('useremail')
-            user_password = request.POST.get('userpass')
-            new_user = UserDetail(        
-                user_name=username,
-                user_email=user_email,
-                user_password=user_password,
-            )
+        user_id = request.POST.get('user_id')
+        print(user_id)        
+        user = get_object_or_404(UserDetail, user_id=user_id)
+        user.user_name = request.POST.get('user_name')
+        user.user_email = request.POST.get('user_email')
+        user.user_password = request.POST.get('user_pass')
+        user.save()
+    return HttpResponseRedirect(reverse('manage_users'))
 
 def delete_user(request,user_id):
-    print(user_id)
-    return HttpResponseRedirect(reverse('manage_docs'))
+    user = get_object_or_404(UserDetail, user_id=user_id)
+    print(user)
+    if request.method == 'POST':
+        user.delete()
+    return HttpResponseRedirect(reverse('manage_users'))
 
 def upload_pdf(request):
     if request.method == 'POST':
@@ -77,14 +90,12 @@ def upload_pdf(request):
         pages = loader.load()
         text_splitter = TokenTextSplitter(chunk_size=1000, chunk_overlap=150, length_function=len)
         docs = text_splitter.split_documents(pages)
-        embedding = OpenAIEmbeddings(openai_api_key='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')
+        embedding = OpenAIEmbeddings(openai_api_key='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')
         vectordb = Chroma.from_documents(documents=docs, embedding=embedding, persist_directory=vectordb_path)        
         return HttpResponseRedirect(reverse('manage_docs'))
 
 def delete_pdf(request,pdf_id):
-    print(pdf_id)
-    return HttpResponseRedirect(reverse('manage_user'))
-
-def reprocess_pdf(request,pdf_id):
-    print(pdf_id)
-    return HttpResponseRedirect(reverse('manage_user'))
+    pdf = get_object_or_404(PDF_Details, pdf_id=pdf_id)
+    if request.method == 'POST':
+        pdf.delete()
+    return HttpResponseRedirect(reverse('manage_docs'))

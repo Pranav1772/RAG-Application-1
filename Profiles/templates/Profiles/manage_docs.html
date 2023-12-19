@@ -101,8 +101,6 @@
                 {% csrf_token %}
                 <label for="inputNumber" class="col-sm-2 col-form-label mb-2">File Upload</label>
                 <div class="row">
-
-
                   <div class="col-sm-4 mb-2">
                     <input class="form-control" type="file" id="formFile" name="pdf_file">
                   </div>
@@ -135,9 +133,11 @@
                   <td>{{pdf.pdf_name}}</td>
                   <td></td>
                   <td></td>
-                  <td><button type="button" class="btn btn-outline-danger"><i class="ri-delete-bin-fill"></i></button>
-                    <button type="button" class="btn btn-outline-success ms-2"><i class="bx bx-refresh"></i></button></td>
-
+                  <td>
+                    <form action="{% url 'delete_pdf' pdf.pdf_id %}" method="post" class="d-inline">
+                      {% csrf_token %}
+                    <button type="submit" class="btn btn-outline-danger"><i class="ri-delete-bin-fill"></i></button>
+                    </form>
                 </tr>
                 {% endfor %}
 

@@ -7,10 +7,8 @@ from langchain.embeddings.openai import OpenAIEmbeddings
 from langchain.chat_models import ChatOpenAI
 from langchain.chains import ConversationalRetrievalChain
 from langchain.memory import ConversationBufferMemory
-from django.contrib.messages import get_messages
-from asgiref.sync import async_to_sync
-from channels.layers import get_channel_layer
 from django.core.cache import cache
+import google.generativeai as genai
 
 class ChatConsumer(WebsocketConsumer):
     def connect(self):      
@@ -22,14 +20,20 @@ class ChatConsumer(WebsocketConsumer):
         pdf_id = cache.get('my_pdf_data')
         print(pdf_id)
 
+        GOOGLE_API_KEY=('AIzaSyCheg7DR_6qoTYlcAWThlJukPn-NeCyMO0')
+        genai.configure(api_key=GOOGLE_API_KEY)
+        model = genai.GenerativeModel('gemini-pro-vision')            
+        response = model.generate_content(["Describe what is present in the image in details.", img], stream=True)
+        response.resolve()
+
         # Check if conversation chain exists
         if not hasattr(self, 'qa'):           
             # Initialize conversation chain on first message
             pdf_details = get_object_or_404(PDF_Details, pdf_id=pdf_id)
             vectordb_path = pdf_details.pdf_vectordb_path
-            embedding = OpenAIEmbeddings(openai_api_key='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')
+            embedding = OpenAIEmbeddings(openai_api_key='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')
             vectordb = Chroma(persist_directory=vectordb_path, embedding_function=embedding)
-            llm = ChatOpenAI(model_name="gpt-3.5-turbo",temperature=0.6,openai_api_key='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')
+            llm = ChatOpenAI(model_name="gpt-3.5-turbo",temperature=0.6,openai_api_key='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')
             memory = ConversationBufferMemory(memory_key="chat_history",return_messages = True)
             retriever = vectordb.as_retriever()
             self.qa = ConversationalRetrievalChain.from_llm(llm,retriever = retriever,memory = memory)
@@ -50,6 +54,15 @@ class ChatConsumer(WebsocketConsumer):
             'question':message,
             'message':result["answer"],
         }))
+
+        # def image_processing(self):
+        #     GOOGLE_API_KEY=('AIzaSyCheg7DR_6qoTYlcAWThlJukPn-NeCyMO0')
+        #     genai.configure(api_key=GOOGLE_API_KEY)
+        #     model = genai.GenerativeModel('gemini-pro-vision')
+
+        #     response = model.generate_content(["Describe what is present in the image in details.", img], stream=True)
+        #     response.resolve()
+        #     print(response.text)
 
         def createPersona(self, ch):
             gen_prompt = '''

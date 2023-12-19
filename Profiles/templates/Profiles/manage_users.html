@@ -153,10 +153,12 @@
                     <td>{{user.user_name}}</td>
                     <td>{{user.user_email}}</td>
                     <td>
-                      <form action="{% url 'update_user' user.user_id %}" method="get" class="d-inline">
+                      <form action="{% url 'update_user' user.user_id %}" method="post" class="d-inline">
+                        {% csrf_token %}
                         <button type="submit" class="btn btn-outline-success"><i class="bx bxs-edit"></i></button>
                       </form>
-                      <form action="{% url 'delete_user' user.user_id %}" method="get" class="d-inline">
+                      <form action="{% url 'delete_user' user.user_id %}" method="post" class="d-inline">
+                        {% csrf_token %}
                         <button type="submit" class="btn btn-outline-danger"><i class="ri-delete-bin-line"></i></button>
                       </form>
                     </td>

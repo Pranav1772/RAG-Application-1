@@ -88,6 +88,10 @@ TEMPLATES = [
     },
 ]
 
+FILE_UPLOAD_HANDLERS = [
+    'django.core.files.uploadhandler.TemporaryFileUploadHandler',
+]
+
 WSGI_APPLICATION = 'MAIN_IMPLEMENTATION.wsgi.application'
 
 
