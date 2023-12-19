@@ -8,6 +8,7 @@ urlpatterns = [
     path("add_user/",views.add_user,name='add_user'),
     path("upload_pdf/",views.upload_pdf,name='upload_pdf'),
     path('update_user/<int:user_id>/', views.update_user, name='update_user'),
+    path('update_users_page/', views.update_users_page, name='update_users_page'),
     path('delete_user/<int:user_id>/', views.delete_user, name='delete_user'),
     path('delete_pdf/<int:user_id>/', views.delete_pdf, name='delete_pdf'),
     path('reprocess_pdf/<int:user_id>/', views.reprocess_pdf, name='reprocess_pdf'),

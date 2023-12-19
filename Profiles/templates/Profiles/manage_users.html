@@ -9,7 +9,7 @@
   </div>
   <!-- End Logo -->
 
-
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.css" />
   <!-- End Search Bar -->
   <style>
     .card {
@@ -137,15 +137,13 @@
             <div class="table-responsive">
 
 
-              <table class="table datatable mt-4">
-                <thead>
+              <table id="user_table" class="table">
+                <thead >
                   <tr>
                     <th scope="col">User Unique Id</th>
                     <th scope="col">User Name</th>
                     <th scope="col">User Email</th>
                     <th scope="col">Actions</th>
-
-
                   </tr>
                 </thead>
                 <tbody>
@@ -155,10 +153,10 @@
                     <td>{{user.user_name}}</td>
                     <td>{{user.user_email}}</td>
                     <td>
-                      <form action="{% url 'update_user' user.user_id %}" method="get">  
+                      <form action="{% url 'update_user' user.user_id %}" method="get" class="d-inline">
                         <button type="submit" class="btn btn-outline-success"><i class="bx bxs-edit"></i></button>
                       </form>
-                      <form action="{% url 'delete_user' user.user_id %}" method="get">  
+                      <form action="{% url 'delete_user' user.user_id %}" method="get" class="d-inline">
                         <button type="submit" class="btn btn-outline-danger"><i class="ri-delete-bin-line"></i></button>
                       </form>
                     </td>
@@ -184,7 +182,13 @@
       </div>
     </div>
   </section>
-
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
+  <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.js"></script>
+  <script>
+      $(document).ready(function () {
+          $('#user_table').DataTable();
+      });
+  </script>
 
 
 </main>

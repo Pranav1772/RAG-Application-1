@@ -14,8 +14,11 @@ def chat(request):
 
 def view_pdf(request,pdf_id):
     cache.set('my_pdf_data', pdf_id, timeout=300) 
-    pdf_details = PDF_Details.objects.get(pk=pdf_id)
-    return render(request, 'ChatBot/chat', {'pdf_details': pdf_details})
+    pdf_details = PDF_Details.objects.get(pk=pdf_id)    
+    pdf_details_list = PDF_Details.objects.all()
+    pdf_data = [{'pdf_id': pdf.pdf_id, 'pdf_name': pdf.pdf_name} for pdf in pdf_details_list]
+    context = {'pdf_data': pdf_data}
+    return render(request,'ChatBot/chat.html',context)
     # return HttpResponseRedirect(reverse('chatbot'))    
 
 # def detail_pdf(request, pdf_id):

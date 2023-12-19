@@ -49,8 +49,18 @@ def add_user(request):
      
 def update_user(request,user_id):
     user = get_object_or_404(UserDetail, user_id=user_id)
-    context = {'user_id',user_id}
-    return render(request,'Profiles/update_user_page',context)
+    return render(request,'Profiles/update_user_page',user)
+
+def update_users_page(request):
+    if request.method == 'POST':
+            username = request.POST.get('username')
+            user_email = request.POST.get('useremail')
+            user_password = request.POST.get('userpass')
+            new_user = UserDetail(        
+                user_name=username,
+                user_email=user_email,
+                user_password=user_password,
+            )
 
 def delete_user(request,user_id):
     print(user_id)
@@ -67,7 +77,7 @@ def upload_pdf(request):
         pages = loader.load()
         text_splitter = TokenTextSplitter(chunk_size=1000, chunk_overlap=150, length_function=len)
         docs = text_splitter.split_documents(pages)
-        embedding = OpenAIEmbeddings(openai_api_key='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')
+        embedding = OpenAIEmbeddings(openai_api_key='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')
         vectordb = Chroma.from_documents(documents=docs, embedding=embedding, persist_directory=vectordb_path)        
         return HttpResponseRedirect(reverse('manage_docs'))
 

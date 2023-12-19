@@ -27,15 +27,21 @@ class ChatConsumer(WebsocketConsumer):
             # Initialize conversation chain on first message
             pdf_details = get_object_or_404(PDF_Details, pdf_id=pdf_id)
             vectordb_path = pdf_details.pdf_vectordb_path
-            embedding = OpenAIEmbeddings(openai_api_key='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')
+            embedding = OpenAIEmbeddings(openai_api_key='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')
             vectordb = Chroma(persist_directory=vectordb_path, embedding_function=embedding)
-            llm = ChatOpenAI(model_name="gpt-3.5-turbo",temperature=0.6,openai_api_key='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')
+            llm = ChatOpenAI(model_name="gpt-3.5-turbo",temperature=0.6,openai_api_key='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')
             memory = ConversationBufferMemory(memory_key="chat_history",return_messages = True)
             retriever = vectordb.as_retriever()
             self.qa = ConversationalRetrievalChain.from_llm(llm,retriever = retriever,memory = memory)
 
         # Generate and send next utterance
-        result = self.qa({"question":(message)})
+        prompt = """You are a general assistant AI chatbot here to assist the user based on the PDFs they uploaded,
+                    and the subsequent openAI embeddings. Please assist the user to the best of your knowledge based on 
+                    uploads, embeddings and the following user input. And give the output in HTML renderable format (for
+                    example if there is end of line then replace it with br tag and when asked for table then arrange the table tag
+                    and tr and td tags) USER INPUT:"""
+        question = prompt + message
+        result = self.qa({"question":(question)})
         print("\nChatBot: "+result["answer"])
         # response = self.qa.next_utterance(message)
 
