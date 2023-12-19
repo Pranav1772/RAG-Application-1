@@ -49,8 +49,8 @@ def add_user(request):
      
 def update_user(request,user_id):
     user = get_object_or_404(UserDetail, user_id=user_id)
-
-    return HttpResponseRedirect(reverse('manage_docs'))
+    context = {'user_id',user_id}
+    return render(request,'Profiles/update_user_page',context)
 
 def delete_user(request,user_id):
     print(user_id)
