@@ -33,7 +33,7 @@ class ChatConsumer(WebsocketConsumer):
             vectordb_path = pdf_details.pdf_vectordb_path
             embedding = OpenAIEmbeddings(openai_api_key='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')
             vectordb = Chroma(persist_directory=vectordb_path, embedding_function=embedding)
-            llm = ChatOpenAI(model_name="gpt-3.5-turbo",temperature=0.6,openai_api_key='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')
+            llm = ChatOpenAI(model_name="gpt-3.5-turbo",temperature=0.6,openai_api_key='') #remember to use your api key if you want to use it
             memory = ConversationBufferMemory(memory_key="chat_history",return_messages = True)
             retriever = vectordb.as_retriever()
             self.qa = ConversationalRetrievalChain.from_llm(llm,retriever = retriever,memory = memory)
