@@ -20,7 +20,7 @@ class ChatConsumer(WebsocketConsumer):
         pdf_id = cache.get('my_pdf_data')
         print(pdf_id)
 
-        GOOGLE_API_KEY=('AIzaSyCheg7DR_6qoTYlcAWThlJukPn-NeCyMO0')
+        GOOGLE_API_KEY=('') #This is for image description u can skip it if you want
         genai.configure(api_key=GOOGLE_API_KEY)
         model = genai.GenerativeModel('gemini-pro-vision')            
         response = model.generate_content(["Describe what is present in the image in details.", img], stream=True)
